@@ -5,8 +5,10 @@
   "tags": "{{tags}}",
   "authors": "{{authors}}",
   "owner": "{{owner}}",
-  "filesets": "{{filesets}}",
+  "filesets": [],
   "revisions": [],
+  "comments": [],
+  "reviews": [],
   "ipfsAddress": "{{ipfsAddress}}",
   "metadata": {
     "originalName": "{{originalName}}",

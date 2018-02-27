@@ -37,3 +37,13 @@ originstamp status at articles?
 
 10.15 : bwcloud down: wollte login bei add und modify fertig machen... überprüfen obs geht
                         anschließend home site
+
+21.02.
+------
+add: articleComments / reviews
+    - make json template for comments/reviews
+    - alter article and fileset template
+
+show comments, reviews on: search, modify
+
+    -add comments /review upload in cryptSubmit

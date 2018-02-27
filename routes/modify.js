@@ -9,8 +9,8 @@ var upload = multer({dest: __dirname + '/uploads'});
 /* GET home page. */
 router.get('/', async function (req, res, next) {
 //TODO stump
-/*    req.session.userSha = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08'
-    req.session.loggedin = true*/
+//    req.session.userSha = '28d96ccd3a2c0ca2cd2d2c0989968182c7e79574640cb9c6b5be3e1f167b4dbf'
+//     req.session.loggedin = true
 
 
     if(!req.session.loggedin){req.session.loginErrs = [{msg: 'Please login first!'}]; req.session.redirect="/modify"; res.redirect('/login'); return  }
@@ -18,13 +18,14 @@ router.get('/', async function (req, res, next) {
     var articles = await getData(req, 'articles_storage_UI' , e=>e.owner == req.session.userSha)
     var datasets =  await getData(req,'files_storage_UI', e=>e.owner == req.session.userSha)
     var newArticles = await helper.addDatasetsToArticles(articles, datasets);
+    // console.log(newArticles[4].comments)
     res.render('modify', {
         loggedin: req.session.loggedin,
         modify: true,
         articles: newArticles,
         datasets:datasets
     });
-    await testDatabase(req)
+    // await testDatabase(req)
     // await dropDatabase(req)
 });
 
@@ -132,7 +133,7 @@ async function testDatabase(req) {
     console.log(docdbres)
     docdb.close()
 
-    const filedb = await orbitdb.docstore('files_storage_UI', {overwrite: true})//,
+     const filedb = await orbitdb.docstore('files_storage_UI', {overwrite: true})//,
     await filedb.load()
     // filedb.drop()
     var filedbres = await filedb.get("")
@@ -196,6 +197,7 @@ function writeToIpfs(req) {
 
     })
 }
+
 
 
 module.exports = router;

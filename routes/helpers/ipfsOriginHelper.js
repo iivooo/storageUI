@@ -33,6 +33,29 @@ module.exports = {
     * IPFS / cluster / Originstamp interaction
     *
     * */
+
+    async addCommentToIpfs(req) {
+        try {
+            var originstamp = await this.originUpload(req.file.sha);
+
+            const ipfs = req.app.get('ipfs');
+            var buffer = await Buffer.from(req.body.timestampString, 'utf8');
+            var uploaded = await ipfs.files.add(buffer)
+            console.log('addCOmmentToIpfs:uploaded file: ' + JSON.stringify(uploaded))
+            var isPinned = await this.pinToCluster(uploaded[0].hash)
+            console.log('is pinned: ' + isPinned)
+            return uploaded[0].hash
+        } catch(err) {
+            console.log(err)
+            return new Error('ipfsOriginHelper.addToIpfs: ' + err)
+
+        }
+
+
+
+    },
+
+
     async addToIPFS(req) {
         try {
             if (typeof req.file == 'undefined') {

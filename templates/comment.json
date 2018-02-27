@@ -1,0 +1,15 @@
+{
+  "_id": "{{id}}",
+  "title": "{{title}}",
+  "comment": "{{comment}}",
+  "timestampString": "{{timestampString}}",
+  "timestampStringContents": "{{timestampStringContents}}",
+  "articleHash": "{{articleHash}}",
+  "date": "{{date}}",
+  "authors": "{{authors}}",
+  "from": "{{from}}",
+  "ipfsAddress": "{{ipfsAddress}}",
+  "metadata": {
+    "sha256": "{{sha256}}"
+  }
+}

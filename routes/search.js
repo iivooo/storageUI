@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var Fuse = require('fuse.js');
 var helper = require(__dirname + '/helpers/ipfsOriginHelper');
+var fs = require('fs');
+var archiver = require('archiver');
+var async = require('async');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -59,6 +62,46 @@ router.get('/download/:id/:name', async function (req, res, next) {
     const stream = await ipfs.files.catReadableStream(req.params.id)
     res.attachment(req.params.name)
     stream.pipe(res)
+})
+
+router.get('/downloadReviewFiles/:id', async function (req, res, next) {
+    try {
+        const orbitdb = req.app.get('orbit');
+        const docdb = await orbitdb.docstore('articles_storage_UI', {overwrite: true})//,
+        await docdb.load()
+        var docdbres = await docdb.get(req.params.id)
+        docdb.close()
+
+        if (docdbres[0] == null) return new Error('No article found to zip review files.')
+
+        const ipfs = req.app.get('ipfs');
+// console.log('before truncate')
+
+        var zip = require("node-native-zip");
+        var archive = new zip();
+
+        async.forEachOf(docdbres[0].reviews, async function (rev, key) {
+            var res = await ipfs.files.get(rev.ipfsAddress)
+            archive.add(rev.metadata.originalName, res[0].content);
+        }, function (err) {
+            if (err) console.error(err.message);
+            console.log('after archiving')
+            var buffer = archive.toBuffer();
+            console.log('before write')
+            fs.writeFile(__dirname + '/../download_files/' + docdbres[0].title + '_reviewFiles.zip', buffer, function () {
+                console.log('finisihed')
+                res.attachment(docdbres[0].title + '_reviewFiles.zip')
+                res.download(__dirname + '/../download_files/' + docdbres[0].title + '_reviewFiles.zip', (err) => {
+                    console.log('truncate')
+                    fs.unlink(__dirname + '/../download_files/' + docdbres[0].title + '_reviewFiles.zip');
+                });
+
+
+            });
+        });
+    } catch (err) {
+        console.log('error in reviewFilesZipper: ' + err)
+    }
 })
 
 async function getDatasetData(req) {

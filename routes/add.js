@@ -318,7 +318,6 @@ async function writeArticleToOrbit(req, ipfsAddress) {
                 "tags": req.body.articleTags,
                 "authors": req.body.articleAuthors,
                 "owner": req.session.userSha,
-                "filesets": [],
                 "ipfsAddress": ipfsAddress,
                 "originalName": req.file.originalname,
                 "encoding": req.file.encoding,
