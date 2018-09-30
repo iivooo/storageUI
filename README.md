@@ -26,6 +26,8 @@ Now fetch this project to your server in any folder you like. A folder in the
 userspace is recommended due to permission issues:
 `git clone ...`
 
+If you dont have it you need some compilers. e.g. in ubuntu `sudo apt-get install build-essentials`
+
 Now install all dependecies of the project. Go into the projects folder and hit:
 `npm install`
 
